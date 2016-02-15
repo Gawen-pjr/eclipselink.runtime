@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
@@ -236,7 +237,8 @@ public class ElementVisitor<R, P> extends AbstractElementVisitor6<MetadataAnnota
 
             // Visit the enclosed elements.
             for (Element enclosedElement : typeElement.getEnclosedElements()) {
-                if (enclosedElement.getKind().isClass()) {
+                ElementKind enclosedElementKind = enclosedElement.getKind();
+                if (enclosedElementKind.isClass() || enclosedElementKind.isInterface()) {
                     metadataClass.addEnclosedClass(factory.getMetadataClass(enclosedElement));
                 } else {
                     enclosedElement.accept(this, metadataClass);
